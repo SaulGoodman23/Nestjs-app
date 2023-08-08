@@ -1,21 +1,21 @@
 import { Expose, Transform } from 'class-transformer';
-import { User } from 'src/users/user.entity';
+import { User } from '../../users/user.entity';
 
 export class ReportDto {
   @Expose()
   id: number;
   @Expose()
-  make: string;
-  @Expose()
-  model: string;
+  price: number;
   @Expose()
   year: number;
-  @Expose()
-  price: number;
   @Expose()
   lng: number;
   @Expose()
   lat: number;
+  @Expose()
+  make: string;
+  @Expose()
+  model: string;
   @Expose()
   mileage: number;
   @Expose()
@@ -25,5 +25,3 @@ export class ReportDto {
   @Expose()
   userId: number;
 }
-
-// obj -> original report entity

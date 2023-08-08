@@ -1,28 +1,32 @@
 import {
-  Body,
   Controller,
   Post,
-  Session,
+  Body,
   UseGuards,
   Patch,
   Param,
-  Query,
   Get,
+  Query,
 } from '@nestjs/common';
-import { AdminGuard } from 'src/guards/admin.guard';
-import { AuthGuard } from 'src/guards/auth.guards';
-import { Serialize } from 'src/interceptors/serialize.interceptor';
-import { CurrentUser } from 'src/users/decorators/current-user.decorator';
-import { User } from 'src/users/user.entity';
-import { ApproveReportDto } from './dtos/approve-report.dto';
-import { CreateReportDto } from './dtos/create-report-dto';
-import { GetEstimateDto } from './dtos/get-estimate.dto';
-import { ReportDto } from './dtos/report.dto';
+import { CreateReportDto } from './dtos/create-report.dto';
 import { ReportsService } from './reports.service';
+import { AuthGuard } from '../guards/auth.guard';
+import { CurrentUser } from '../users/decorators/current-user.decorator';
+import { User } from '../users/user.entity';
+import { ReportDto } from './dtos/report.dto';
+import { Serialize } from '../interceptors/serialize.interceptor';
+import { ApproveReportDto } from './dtos/approve-report.dto';
+import { AdminGuard } from '../guards/admin.guard';
+import { GetEstimateDto } from './dtos/get-estimate.dto';
 
 @Controller('reports')
 export class ReportsController {
   constructor(private reportsService: ReportsService) {}
+
+  @Get()
+  getEstimate(@Query() query: GetEstimateDto) {
+    return this.reportsService.createEstimate(query);
+  }
 
   @Post()
   @UseGuards(AuthGuard)
@@ -35,10 +39,5 @@ export class ReportsController {
   @UseGuards(AdminGuard)
   approveReport(@Param('id') id: string, @Body() body: ApproveReportDto) {
     return this.reportsService.changeApproval(id, body.approved);
-  }
-
-  @Get()
-  getEstimate(@Query() query: GetEstimateDto) {
-    return this.reportsService.createEstimate(query);
   }
 }
